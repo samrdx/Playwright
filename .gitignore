@@ -13,3 +13,9 @@ Desktop.ini
 ~$*
 .849C9593* # Archivos de entorno (claves secretas)
 .env
+
+# Playwright
+/playwright-report/
+/blob-report/
+/playwright/.cache/
+/playwright/.auth/
