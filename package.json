@@ -8,7 +8,9 @@
   },
   "devDependencies": {
     "@playwright/test": "^1.56.1",
-    "@types/node": "^24.10.1"
+    "@types/node": "^24.10.1",
+    "playwright": "^1.56.1",
+    "typescript": "^5.9.3"
   },
   "scripts": {},
   "repository": {
@@ -18,9 +20,10 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "type": "commonjs",
+  "type": "module",
   "bugs": {
     "url": "https://github.com/samrdx/Playwright/issues"
   },
   "homepage": "https://github.com/samrdx/Playwright#readme"
 }
+
