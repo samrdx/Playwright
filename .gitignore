@@ -1,0 +1,15 @@
+# Node.js
+node_modules/
+dist/
+test-results/
+playwright-report/
+blob-report/
+
+# Windows y OneDrive (Para evitar el error que tuviste)
+Thumbs.db
+Desktop.ini
+.DS_Store
+*.tmp
+~$*
+.849C9593* # Archivos de entorno (claves secretas)
+.env
