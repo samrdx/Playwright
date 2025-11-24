@@ -22,5 +22,5 @@ test('Login test', async ({ page }) => {
    
 
     expect(title).toEqual('Sistema de Gestion de Viajes - Inicio sesion');
-    // El navegador se cierra automáticamente al finalizar el test.
+    //El navegador se cierra automáticamente al finalizar el test.
 });
