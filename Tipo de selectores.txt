@@ -1,0 +1,30 @@
+1. ID Selector : Selects elements based on their id attribute. 
+const element = page.locator('id=my-button');
+
+2. Class Name Selector: Selects elements based on their class name. 
+const element = page.locator('.submit-button');
+
+3. Text Selector: Selects elements that contain specific text.
+const element = page.locator ('text=Submit'); 
+
+4. CSS Selector: Selects elements based on their CSS properties. 
+const element = page.locator('css=button#id');
+
+5. XPath Selector: Selects elements based on the XPath query. 
+const element = page.locator('xpath=//button[text()="Submit"]'); 
+
+
+
+6. Data-test-id Selector: Selects elements by a custom attribute (data-testid), commonly used in testing. 
+7. Role Selector: Selects elements by their ARIA role. 
+8. Combining Selectors: Allows combining multiple selectors for more specific targeting. 
+
+9. Chaining Selectors: Enables chaining of multiple selectors to refine the selection. 
+10. Frame Locators: For interacing with elements inside iframes. 
+11. Attribute Selector: Selects elements based on any attribute. 
+12. nth-match Selector: Selects a specific instase of an element among multiple matches. 
+
+13. SVG Selectors: 
+14. Shadow DOM Selectors: 
+	- Direct Selector
+-Piercing Shadow DOM 
