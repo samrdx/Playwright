@@ -32,6 +32,9 @@ export default defineConfig({
     trace: 'on-first-retry',
     // Run tests in headed mode for debugging/visibility
     headless: false,
+    // Configure screenshot settings
+    screenshot: 'only-on-failure',
+    video: 'retain-on-failure',
   },
 
   /* Configure projects for major browsers */

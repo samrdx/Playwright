@@ -1,4 +1,5 @@
 import { test, expect } from '@playwright/test';
+import { takeScreenshot } from '../helpers/screenshot.helper.js';
 
 /**
  * MoveOnTruck - Test de Creación de Viaje (Flujo Feliz) - CORREGIDO
@@ -67,8 +68,7 @@ test.describe('Crear Viaje - Flujo Feliz (Happy Path)', () => {
     console.log('✓ Página de creación de viaje cargada');
     
     // Tomar una captura para validar que estamos en la página correcta
-    await page.screenshot({ path: 'crear-viaje-formulario.png', fullPage: true });
-    console.log('Captura guardada: crear-viaje-formulario.png');
+    await takeScreenshot(page, 'crear-viaje-formulario');
 
     // Helpers seguros para evaluate/evaluateAll que reintentan si el contexto se destruye
     const safeEvaluate = async (locator: any, fn: Function, arg?: any, retries = 3) => {
@@ -458,7 +458,7 @@ test.describe('Crear Viaje - Flujo Feliz (Happy Path)', () => {
         console.log('DEBUG: modals/backdrops after click: ' + JSON.stringify(modals || []));
 
         // Capturar screenshot y selects para diagnóstico
-        await page.screenshot({ path: `after-agregar-ruta-${tryRuta + 1}.png`, fullPage: true }).catch(() => {});
+        await takeScreenshot(page, `after-agregar-ruta-${tryRuta + 1}`).catch(() => {});
         const selectsDebug = await safeEvaluateAll(page.locator('select'), (sels: HTMLSelectElement[]) =>
           (sels || []).map(s => ({ id: s.id || null, name: s.getAttribute('name') || null, options: Array.from(s.options || []).map(o => (o.textContent || '').trim()) }))
         ).catch(() => null);
@@ -825,8 +825,7 @@ test.describe('Crear Viaje - Flujo Feliz (Happy Path)', () => {
     }
     
     // Tomar captura final
-    await page.screenshot({ path: 'crear-viaje-listado.png', fullPage: true });
-    console.log('Captura guardada: crear-viaje-listado.png');
+    await takeScreenshot(page, 'crear-viaje-listado');
     
     // ========== PASO 16: Navegar a viajes/asignar para verificar el viaje ==========
     console.log('\nPaso 16: Navegando a viajes/asignar para verificar el viaje...');
