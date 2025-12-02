@@ -5,6 +5,7 @@
 MoveOnTruck es un Sistema de Gestión de Viajes (SGV) diseñado en español para la gestión completa de operaciones de transporte y logística. La aplicación permite a los usuarios crear, asignar, monitorear y cerrar viajes de transporte con múltiples estados y funcionalidades avanzadas.
 
 ### Funcionalidades Principales
+
 - **Gestión de Viajes**: Crear, planificar, asignar y monitorear viajes
 - **Gestión de Recursos**: Administrar transportistas, conductores, vehículos y zonas geográficas
 - **Seguimiento en Tiempo Real**: Monitoreo de viajes con múltiples estados operacionales
@@ -13,6 +14,7 @@ MoveOnTruck es un Sistema de Gestión de Viajes (SGV) diseñado en español para
 - **Multi-idioma**: Interfaz completamente en español chileno
 
 ### Estados de Viaje Disponibles
+
 1. **Planificado**: Viajes creados sin asignación de transporte, vehículo y conductor
 2. **Asignado**: Viajes con transportista, vehículo y conductor asignados
 3. **Asignado Parcial**: Viajes con asignación incompleta
@@ -31,12 +33,14 @@ MoveOnTruck es un Sistema de Gestión de Viajes (SGV) diseñado en español para
 **Ubicación de Acceso**: Menú lateral → Viajes → Planificar → `/viajes/crear`
 
 **Precondiciones**:
+
 - Usuario autenticado (Angie / usuario válido)
 - Usuario tiene permisos para crear viajes
 - Existen clientes registrados en el sistema
 - Estado inicial: Página en blanco/nueva
 
 **Pasos**:
+
 1. Hacer clic en el menú "Viajes" en la barra lateral izquierda
 2. Hacer clic en la opción "Planificar" en el submenú desplegado
 3. Esperar a que cargue la página de creación de viajes (`/viajes/crear`)
@@ -51,6 +55,7 @@ MoveOnTruck es un Sistema de Gestión de Viajes (SGV) diseñado en español para
 12. Aguardar confirmación del sistema
 
 **Resultados Esperados**:
+
 - El viaje se crea exitosamente sin errores
 - El viaje aparece con estado "Planificado" en el listado de viajes
 - Se muestra un mensaje de confirmación "Viaje creado exitosamente"
@@ -59,6 +64,7 @@ MoveOnTruck es un Sistema de Gestión de Viajes (SGV) diseñado en español para
 - El contador de "Planificado" en el dashboard se incrementa en 1
 
 **Criterios de Éxito**:
+
 - ✓ Viaje creado sin errores de validación
 - ✓ ID único generado correctamente
 - ✓ Estado inicial es "Planificado"
@@ -69,11 +75,13 @@ MoveOnTruck es un Sistema de Gestión de Viajes (SGV) diseñado en español para
 
 ### 2. Validación de Campos Obligatorios
 
-**Precondiciones**: 
+**Precondiciones**:
+
 - Página de creación de viaje cargada
 - Todos los campos están en blanco
 
 **Pasos**:
+
 1. Intentar hacer clic en el botón "Guardar" sin completar ningún campo
 2. Observar los mensajes de validación
 3. Completar solo el campo "Cliente" y hacer clic en "Guardar" nuevamente
@@ -82,6 +90,7 @@ MoveOnTruck es un Sistema de Gestión de Viajes (SGV) diseñado en español para
 6. Observar los campos que faltan
 
 **Resultados Esperados**:
+
 - Se muestran mensajes de error indicando "Este campo es obligatorio" o similares (en español)
 - Los campos obligatorios están claramente marcados
 - El formulario no se envía si hay campos obligatorios vacíos
@@ -89,6 +98,7 @@ MoveOnTruck es un Sistema de Gestión de Viajes (SGV) diseñado en español para
 - Los mensajes de error son específicos por campo
 
 **Campos Esperados como Obligatorios**:
+
 - Unidad de Negocio
 - Cliente
 - Tipo de Operación
@@ -97,6 +107,7 @@ MoveOnTruck es un Sistema de Gestión de Viajes (SGV) diseñado en español para
 - Fecha de Presentación
 
 **Criterios de Éxito**:
+
 - ✓ Validación de campos obligatorios funciona correctamente
 - ✓ Mensajes claros en español
 - ✓ Formulario no se envía sin datos requeridos
@@ -107,10 +118,12 @@ MoveOnTruck es un Sistema de Gestión de Viajes (SGV) diseñado en español para
 ### 3. Validación de Formato de Fecha
 
 **Precondiciones**:
+
 - Página de creación de viaje cargada
 - Otros campos completados correctamente
 
 **Pasos**:
+
 1. Hacer clic en el campo "Fecha de Presentación"
 2. Ingresar una fecha con formato inválido (ej: "32/12/2025")
 3. Intentar guardar el formulario
@@ -120,6 +133,7 @@ MoveOnTruck es un Sistema de Gestión de Viajes (SGV) diseñado en español para
 7. Verificar que se acepte
 
 **Resultados Esperados**:
+
 - Sistema rechaza fechas en formato incorrecto con mensaje de error
 - Sistema rechaza fechas pasadas (o acepta según política del negocio)
 - Sistema acepta fechas futuras en formato correcto
@@ -127,6 +141,7 @@ MoveOnTruck es un Sistema de Gestión de Viajes (SGV) diseñado en español para
 - Se muestra error específico: "Ingrese una fecha válida" o similar
 
 **Criterios de Éxito**:
+
 - ✓ Validación de formato de fecha funciona correctamente
 - ✓ No se aceptan fechas inválidas
 - ✓ Mensaje de error claro en español
@@ -137,10 +152,12 @@ MoveOnTruck es un Sistema de Gestión de Viajes (SGV) diseñado en español para
 ### 4. Selección de Unidad de Negocio
 
 **Precondiciones**:
+
 - Página de creación cargada
 - Existen al menos 3 unidades de negocio en el sistema (Defecto, Seco, Whatr)
 
 **Pasos**:
+
 1. Hacer clic en el dropdown "Unidad de Negocio"
 2. Verificar que se muestran todas las opciones disponibles
 3. Seleccionar "Defecto" de la lista
@@ -150,17 +167,20 @@ MoveOnTruck es un Sistema de Gestión de Viajes (SGV) diseñado en español para
 7. Verificar que el viaje se creó con la unidad seleccionada
 
 **Resultados Esperados**:
+
 - El dropdown muestra todas las unidades de negocio disponibles
 - La selección se persiste en el campo
 - El cambio se refleja inmediatamente sin necesidad de confirmar
 - La unidad seleccionada se guarda correctamente en la base de datos
 
 **Unidades de Negocio Esperadas**:
+
 - Defecto
 - Seco
 - Whatr
 
 **Criterios de Éxito**:
+
 - ✓ Todas las unidades de negocio se muestran en el dropdown
 - ✓ La selección es funcional
 - ✓ Los datos se guardan con la opción seleccionada
@@ -171,11 +191,13 @@ MoveOnTruck es un Sistema de Gestión de Viajes (SGV) diseñado en español para
 ### 5. Selección de Cliente Desde Lista Extensa
 
 **Precondiciones**:
+
 - Página de creación cargada
 - Existen más de 50 clientes en el sistema
 - Campo de búsqueda de cliente funcional
 
 **Pasos**:
+
 1. Hacer clic en el campo "Cliente"
 2. Observar si se muestra lista desplegable o campo de búsqueda
 3. Escribir las primeras letras de un cliente (ej: "AGENT" para "AGENCIA DE TRANSPORTES ANDES")
@@ -186,6 +208,7 @@ MoveOnTruck es un Sistema de Gestión de Viajes (SGV) diseñado en español para
 8. Completar resto del formulario y guardar
 
 **Resultados Esperados**:
+
 - El campo de cliente tiene capacidad de búsqueda/filtrado
 - La búsqueda funciona en tiempo real (mientras se escribe)
 - Se muestran resultados relevantes basados en lo ingresado
@@ -194,6 +217,7 @@ MoveOnTruck es un Sistema de Gestión de Viajes (SGV) diseñado en español para
 - Se pueden seleccionar múltiples clientes si el sistema lo permite, o un solo cliente
 
 **Clientes de Prueba Disponibles** (primeros de la lista):
+
 - AGENCIA DE TRANSPORTES ANDES SPA
 - Agudi Transportes Spa
 - Alca Spa
@@ -202,6 +226,7 @@ MoveOnTruck es un Sistema de Gestión de Viajes (SGV) diseñado en español para
 - ... y 170+ más
 
 **Criterios de Éxito**:
+
 - ✓ Búsqueda de cliente funciona eficientemente
 - ✓ Lista de clientes se filtra correctamente
 - ✓ Selección se persiste
@@ -212,10 +237,12 @@ MoveOnTruck es un Sistema de Gestión de Viajes (SGV) diseñado en español para
 ### 6. Ingreso de Origen y Destino
 
 **Precondiciones**:
+
 - Página de creación cargada
 - Campos de origen y destino visibles
 
 **Pasos**:
+
 1. Hacer clic en el campo "Origen"
 2. Ingresar "Santiago" si es campo de texto libre
 3. Alternativamente, si hay lista desplegable, buscar "Santiago"
@@ -225,6 +252,7 @@ MoveOnTruck es un Sistema de Gestión de Viajes (SGV) diseñado en español para
 7. Completar formulario y guardar
 
 **Resultados Esperados**:
+
 - Campo de Origen acepta entrada de texto o selección de lista
 - Campo de Destino funciona de igual forma
 - Se pueden ingresar ciudades o códigos de zona
@@ -233,11 +261,13 @@ MoveOnTruck es un Sistema de Gestión de Viajes (SGV) diseñado en español para
 - No se puede usar el mismo lugar como origen y destino (validación)
 
 **Validaciones Recomendadas**:
+
 - Origen ≠ Destino
 - Origen y Destino son requeridos
 - Validar que sean ubicaciones válidas en el sistema
 
 **Criterios de Éxito**:
+
 - ✓ Campos de origen/destino aceptan datos correctos
 - ✓ Se previene origen = destino (si es requerimiento)
 - ✓ Datos se guardan correctamente
@@ -248,10 +278,12 @@ MoveOnTruck es un Sistema de Gestión de Viajes (SGV) diseñado en español para
 ### 7. Validación de Tipo de Operación
 
 **Precondiciones**:
+
 - Página de creación cargada
 - Campo "Tipo de Operación" visible
 
 **Pasos**:
+
 1. Hacer clic en el campo "Tipo de Operación"
 2. Observar las opciones disponibles
 3. Seleccionar una opción válida (ej: primera opción)
@@ -261,12 +293,14 @@ MoveOnTruck es un Sistema de Gestión de Viajes (SGV) diseñado en español para
 7. Guarda y verifica que se guardó correctamente
 
 **Resultados Esperados**:
+
 - Campo muestra dropdown o lista con opciones disponibles
 - Al menos existen 2+ tipos de operación disponibles
 - La selección se persiste en el formulario
 - El dato se guarda en la base de datos
 
 **Criterios de Éxito**:
+
 - ✓ Tipo de Operación es seleccionable
 - ✓ Múltiples opciones disponibles
 - ✓ Datos se guardan correctamente
@@ -277,10 +311,12 @@ MoveOnTruck es un Sistema de Gestión de Viajes (SGV) diseñado en español para
 ### 8. Creación de Múltiples Viajes Secuenciales
 
 **Precondiciones**:
+
 - Usuario autenticado
 - Página de creación accesible
 
 **Pasos**:
+
 1. Crear primer viaje completando el formulario correctamente
 2. Guardar el viaje
 3. Observar si se redirige a listado o página de detalles
@@ -293,6 +329,7 @@ MoveOnTruck es un Sistema de Gestión de Viajes (SGV) diseñado en español para
 10. Hacer clic en cada viaje para verificar los datos ingresados
 
 **Resultados Esperados**:
+
 - Se pueden crear múltiples viajes sin problemas
 - Cada viaje obtiene un ID único e incremental
 - Los datos de cada viaje se mantienen distintos
@@ -301,6 +338,7 @@ MoveOnTruck es un Sistema de Gestión de Viajes (SGV) diseñado en español para
 - El contador de viajes en dashboard se actualiza
 
 **Criterios de Éxito**:
+
 - ✓ Múltiples viajes se crean sin conflictos
 - ✓ IDs únicos para cada viaje
 - ✓ Datos se guardan correctamente para cada viaje
@@ -312,10 +350,12 @@ MoveOnTruck es un Sistema de Gestión de Viajes (SGV) diseñado en español para
 ### 9. Validación de Campos Opcionales
 
 **Precondiciones**:
+
 - Página de creación cargada
 - Formulario con campos opcionales identificados
 
 **Pasos**:
+
 1. Completar solo los campos obligatorios
 2. Dejar todos los campos opcionales vacíos
 3. Guardar el viaje
@@ -328,12 +368,14 @@ MoveOnTruck es un Sistema de Gestión de Viajes (SGV) diseñado en español para
 7. Verificar que los campos opcionales se muestran en los detalles
 
 **Resultados Esperados**:
+
 - Sistema permite crear viaje sin campos opcionales
 - Campos opcionales son verdaderamente opcionales (no bloqueadores)
 - Cuando se completan, se guardan correctamente
 - Los datos opcionales se muestran en el viaje cuando se visualiza
 
 **Criterios de Éxito**:
+
 - ✓ Viaje se crea sin campos opcionales
 - ✓ Viaje se crea con todos los campos opcionales completos
 - ✓ Campos opcionales se guardan correctamente
@@ -344,10 +386,12 @@ MoveOnTruck es un Sistema de Gestión de Viajes (SGV) diseñado en español para
 ### 10. Manejo de Errores de Conexión/Timeout
 
 **Precondiciones**:
+
 - Página de creación cargada
 - Conexión a internet disponible
 
 **Pasos**:
+
 1. Completar el formulario correctamente
 2. Simular pérdida de conexión (si es posible en desarrollo)
 3. Intentar guardar
@@ -358,6 +402,7 @@ MoveOnTruck es un Sistema de Gestión de Viajes (SGV) diseñado en español para
 8. Verificar si muestra timeout
 
 **Resultados Esperados**:
+
 - Si hay error de conexión, se muestra mensaje amistoso: "Verifique su conexión a internet"
 - Los datos ingresados se preservan (no se pierden al fallar el guardado)
 - Se ofrece opción de reintentar
@@ -365,6 +410,7 @@ MoveOnTruck es un Sistema de Gestión de Viajes (SGV) diseñado en español para
 - Timeout se maneja correctamente (>30-60 segundos)
 
 **Criterios de Éxito**:
+
 - ✓ Errores de conexión se manejan graciosamente
 - ✓ Datos del usuario se preservan
 - ✓ No hay duplicación de datos
@@ -375,10 +421,12 @@ MoveOnTruck es un Sistema de Gestión de Viajes (SGV) diseñado en español para
 ### 11. Creación de Viaje Marcado para Transporte Específico
 
 **Precondiciones**:
+
 - Página de creación cargada
 - Información de transportista disponible en formulario (si existe)
 
 **Pasos**:
+
 1. Si la página permite especificar transportista al crear viaje:
    a. Buscar campo "Transportista" o "Transporte Asignado"
    b. Si existe, seleccionar un transportista
@@ -391,6 +439,7 @@ MoveOnTruck es un Sistema de Gestión de Viajes (SGV) diseñado en español para
    c. Luego ir a Viajes → Asignar para asignar transporte
 
 **Resultados Esperados**:
+
 - Si se permite asignar transporte en creación:
   - Viaje se crea con estado "Asignado" o "Asignado Parcial"
   - El transportista queda vinculado
@@ -400,6 +449,7 @@ MoveOnTruck es un Sistema de Gestión de Viajes (SGV) diseñado en español para
   - El campo de transporte no está disponible
 
 **Criterios de Éxito**:
+
 - ✓ Sistema maneja correctamente la asignación de transportista
 - ✓ Estados reflejan correctamente si hay asignación
 - ✓ Datos de transportista se guardan si se proporcionan
@@ -409,10 +459,12 @@ MoveOnTruck es un Sistema de Gestión de Viajes (SGV) diseñado en español para
 ### 12. Visualización y Confirmación Previa a Guardar
 
 **Precondiciones**:
+
 - Página de creación cargada
 - Formulario parcialmente completado
 
 **Pasos**:
+
 1. Completar el formulario con datos de prueba válidos
 2. Hacer clic en botón "Guardar" o "Crear Viaje"
 3. Observar si aparece modal de confirmación antes de crear
@@ -425,6 +477,7 @@ MoveOnTruck es un Sistema de Gestión de Viajes (SGV) diseñado en español para
    a. Verificar que crea directamente después de hacer clic
 
 **Resultados Esperados**:
+
 - Modal de confirmación es opcional pero deseable para UX
 - Si existe, muestra resumen claro de datos
 - "Cancelar" no crea el viaje
@@ -432,6 +485,7 @@ MoveOnTruck es un Sistema de Gestión de Viajes (SGV) diseñado en español para
 - Si no existe modal, la creación es inmediata y confiable
 
 **Criterios de Éxito**:
+
 - ✓ Proceso de creación es claro
 - ✓ Usuario puede revisar datos antes de confirmar (preferible)
 - ✓ Cancelación funciona correctamente
@@ -442,9 +496,11 @@ MoveOnTruck es un Sistema de Gestión de Viajes (SGV) diseñado en español para
 ### 13. Redirección Post-Creación
 
 **Precondiciones**:
+
 - Viaje creado exitosamente
 
 **Pasos**:
+
 1. Después de guardar el viaje, observar a dónde redirige:
    - ¿A la página de detalles del viaje creado?
    - ¿Al listado de viajes?
@@ -459,12 +515,14 @@ MoveOnTruck es un Sistema de Gestión de Viajes (SGV) diseñado en español para
    - Verificar que está en la primera posición o filtrado correctamente
 
 **Resultados Esperados**:
+
 - La redirección es lógica y útil
 - El usuario puede ver el viaje que acaba de crear
 - El ID está claramente visible
 - Los datos creados son verificables inmediatamente
 
 **Criterios de Éxito**:
+
 - ✓ Redirección es apropiada
 - ✓ Viaje creado es visible
 - ✓ ID está disponible para referencia
@@ -475,10 +533,12 @@ MoveOnTruck es un Sistema de Gestión de Viajes (SGV) diseñado en español para
 ### 14. Validación de Datos Duplicados
 
 **Precondiciones**:
+
 - Viaje ya existe en el sistema
 - Página de creación cargada
 
 **Pasos**:
+
 1. Intentar crear un viaje con exactamente los mismos datos que uno existente:
    - Mismo cliente
    - Mismo origen/destino
@@ -489,6 +549,7 @@ MoveOnTruck es un Sistema de Gestión de Viajes (SGV) diseñado en español para
 3. Observar cómo maneja el sistema
 
 **Resultados Esperados**:
+
 - Opciones posibles según política del negocio:
   A. Se permite crear viajes duplicados (no hay validación)
   B. Se muestra advertencia: "Ya existe un viaje similar"
@@ -498,6 +559,7 @@ MoveOnTruck es un Sistema de Gestión de Viajes (SGV) diseñado en español para
 **Nota**: Este comportamiento depende de los requerimientos del negocio
 
 **Criterios de Éxito**:
+
 - ✓ Sistema maneja duplicados de forma consistente
 - ✓ Si hay duplicados, se comunica claramente al usuario
 - ✓ Comportamiento es lógico según negocio
@@ -507,10 +569,12 @@ MoveOnTruck es un Sistema de Gestión de Viajes (SGV) diseñado en español para
 ### 15. Prueba de Responsividad del Formulario
 
 **Precondiciones**:
+
 - Página de creación cargada en navegador
 - Acceso a herramientas de desarrollador para cambiar resolución
 
 **Pasos**:
+
 1. Ver formulario en resolución de escritorio (1920x1080)
    - Verificar que se ve bien
    - Completar y guardar un viaje exitosamente
@@ -525,6 +589,7 @@ MoveOnTruck es un Sistema de Gestión de Viajes (SGV) diseñado en español para
 4. Completar y guardar un viaje desde móvil
 
 **Resultados Esperados**:
+
 - Formulario es responsivo en todas las resoluciones
 - Todos los campos son accesibles
 - Botones se pueden hacer clic fácilmente
@@ -533,6 +598,7 @@ MoveOnTruck es un Sistema de Gestión de Viajes (SGV) diseñado en español para
 - En móvil, el teclado virtual no bloquea campos importantes
 
 **Criterios de Éxito**:
+
 - ✓ Formulario funcional en escritorio, tablet y móvil
 - ✓ UX es buena en todas las resoluciones
 - ✓ Creación de viajes funciona en todos los tamaños
@@ -543,10 +609,12 @@ MoveOnTruck es un Sistema de Gestión de Viajes (SGV) diseñado en español para
 ### 16. Prueba de Accesibilidad
 
 **Precondiciones**:
+
 - Página de creación cargada
 - Navegador con soporte para accesibilidad
 
 **Pasos**:
+
 1. Navegar por el formulario usando solo TAB
    - Verificar que todos los campos son accesibles
    - Verificar que el orden es lógico (izquierda a derecha, arriba a abajo)
@@ -561,6 +629,7 @@ MoveOnTruck es un Sistema de Gestión de Viajes (SGV) diseñado en español para
    - Enter en dropdowns debe abrirlos
 
 **Resultados Esperados**:
+
 - Todos los campos tienen labels accesibles
 - Orden de tabulación es lógico
 - Lector de pantalla interpreta correctamente los campos
@@ -568,6 +637,7 @@ MoveOnTruck es un Sistema de Gestión de Viajes (SGV) diseñado en español para
 - Navegación por teclado funciona completamente
 
 **Criterios de Éxito**:
+
 - ✓ Formulario es accesible para usuarios con discapacidades
 - ✓ Cumple con WCAG 2.1 AA mínimo
 - ✓ Navegación por teclado funciona
@@ -601,17 +671,20 @@ MoveOnTruck es un Sistema de Gestión de Viajes (SGV) diseñado en español para
 ## Notas Adicionales
 
 ### Ambiente de Pruebas
-- **URL Base**: https://moveontruckqa.bermanntms.cl
+
+- **URL Base**: [https://moveontruckqa.bermanntms.cl](https://moveontruckqa.bermanntms.cl)
 - **Usuario de Prueba**: arivas / arivas
 - **Navegadores Soportados**: Chrome, Firefox, Safari, Edge (versiones recientes)
 - **Idioma**: Español (español-chileno)
 
 ### Datos Críticos
+
 - **Clientes de Prueba**: Clientedummy, Cliente Con Contrato, Cliente Sin Contrato
 - **Unidades de Negocio**: Defecto, Seco, Whatr
 - **Rango de Fechas para Pruebas**: 02/12/2025 - 31/12/2025
 
 ### Áreas de Enfoque
+
 1. **Validación de Datos**: Campos obligatorios, formatos, rangos válidos
 2. **Integridad de Datos**: No hay pérdida de información
 3. **Estados Iniciales**: Los viajes siempre comienzan en "Planificado"
@@ -620,12 +693,14 @@ MoveOnTruck es un Sistema de Gestión de Viajes (SGV) diseñado en español para
 6. **Confiabilidad**: Manejo de errores y casos excepcionales
 
 ### Dependencias del Sistema
+
 - Se requiere acceso a la base de datos de clientes actualizada
 - Se requiere acceso a unidades de negocio configuradas
 - Se requiere que tipos de operación estén disponibles
 - Se requiere acceso a zonas geográficas si se usa búsqueda de origen/destino
 
 ### Criterios de Aceptación Globales
+
 - ✓ Todos los escenarios CRÍTICOS deben pasar
 - ✓ Mínimo 90% de escenarios ALTOS deben pasar
 - ✓ Mínimo 80% de escenarios MEDIOS deben pasar
