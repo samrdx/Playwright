@@ -49,8 +49,8 @@ test.describe('Crear Viaje - Flujo Feliz (Happy Path)', () => {
     
     // Llenar credenciales
     console.log('Ingresando credenciales de usuario...');
-    await page.locator('#login-usuario').fill('arivas');
-    await page.locator('#login-clave').fill('arivas');
+    await page.locator('#login-usuario').fill('srodriguez');
+    await page.locator('#login-clave').fill('srodriguez');
     
     // Hacer clic en Ingresar
     console.log('Haciendo clic en botón Ingresar...');
@@ -58,8 +58,8 @@ test.describe('Crear Viaje - Flujo Feliz (Happy Path)', () => {
     
     // Esperar a que se complete el login
     await page.waitForURL('https://moveontruckqa.bermanntms.cl/site');
-    await expect(page.locator('a.nav-link.dropdown-toggle.nav-user > strong')).toContainText('Angie');
-    console.log('✓ Login exitoso - Usuario: Angie');
+    await expect(page.locator('a.nav-link.dropdown-toggle.nav-user > strong')).toContainText('Samuel');
+    console.log('✓ Login exitoso - Usuario: Samuel');
     
     // ========== PASO 2: Navegar directamente a la página de crear viaje ==========
     console.log('\nPaso 2: Navegando a la página de crear viaje...');
