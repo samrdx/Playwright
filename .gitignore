@@ -19,5 +19,7 @@ Desktop.ini
 /blob-report/
 /playwright/.cache/
 /playwright/.auth/
-/screenshots/       # Screenshots temporales de tests
-*.png              # Screenshots individuales en raíz
+# Screenshots
+screenshots/
+screenshots/*
+*.png
