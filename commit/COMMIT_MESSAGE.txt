@@ -1,0 +1,13 @@
+Fix: robustSelect guard and resilience for crear_viaje_corrected.spec.ts
+
+- Add page.isClosed() guard in robustSelect to avoid exceptions when the page/context is closed in CI.
+- Wrap waitForTimeout calls to avoid "Target page, context or browser has been closed" errors.
+- Improve select and modal handling: safer selectpicker fallback and retries for agrega ruta flow.
+- Add debug logs and screenshots for troubleshooting in Playwright runs.
+
+This commit hardens the MoveOnTruck "Crear Viaje" happy-path test so Chromium/Firefox/WebKit behave consistently.
+
+Files changed:
+- mytest/crear_viaje_corrected.spec.ts
+
+Note: Run the included PowerShell script `do_commit.ps1` to stage and commit the file(s). If you prefer manual steps, see the commands in `do_commit.ps1`.

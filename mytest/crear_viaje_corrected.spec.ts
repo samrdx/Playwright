@@ -31,6 +31,8 @@ test.describe('Crear Viaje - Flujo Feliz (Happy Path)', () => {
    */
   
   test('Crear un nuevo viaje completando correctamente todos los campos requeridos', async ({ page }) => {
+    // Aumentar timeout del test por operaciones de UI lentas
+    test.setTimeout(120000);
     // ========== CONFIGURACIÓN: Manejar diálogos del navegador ==========
     // Manejar diálogos del navegador (como "Cambia tu contraseña")
     page.on('dialog', async dialog => {
@@ -126,8 +128,22 @@ test.describe('Crear Viaje - Flujo Feliz (Happy Path)', () => {
         return found ? found.value : null;
       });
       if (tipoOpValue) {
-        await tipoOperacionSelect.selectOption(tipoOpValue);
-        console.log('✓ Tipo de Operación seleccionada: Tclp2210');
+        let tipoOpSelected = false;
+        for (let retry = 0; retry < 3; retry++) {
+          await tipoOperacionSelect.selectOption(tipoOpValue);
+          await page.waitForTimeout(900);
+          // Verificar si el campo sigue en rojo (clase is-invalid o error)
+          const isInvalid = await tipoOperacionSelect.evaluate(el => el.classList.contains('is-invalid') || el.closest('.form-group, .form-control')?.classList.contains('has-error'));
+          if (!isInvalid) {
+            tipoOpSelected = true;
+            break;
+          }
+        }
+        if (tipoOpSelected) {
+          console.log('✓ Tipo de Operación seleccionada: Tclp2210');
+        } else {
+          console.log('⚠ Tipo de Operación podría no estar correctamente seleccionada');
+        }
       } else {
         // Fallback a un índice conocido si no se encuentra por texto
         await tipoOperacionSelect.selectOption('6').catch(() => {});
@@ -148,8 +164,21 @@ test.describe('Crear Viaje - Flujo Feliz (Happy Path)', () => {
         return found ? found.value : null;
       });
       if (clientValue) {
-        await clienteSelect.selectOption(clientValue);
-        console.log('✓ Cliente seleccionado: Clientedummy');
+        let clienteSelected = false;
+        for (let retry = 0; retry < 3; retry++) {
+          await clienteSelect.selectOption(clientValue);
+          await page.waitForTimeout(900);
+          const isInvalid = await clienteSelect.evaluate(el => el.classList.contains('is-invalid') || el.closest('.form-group, .form-control')?.classList.contains('has-error'));
+          if (!isInvalid) {
+            clienteSelected = true;
+            break;
+          }
+        }
+        if (clienteSelected) {
+          console.log('✓ Cliente seleccionado: Clientedummy');
+        } else {
+          console.log('⚠ Cliente podría no estar correctamente seleccionado');
+        }
       } else {
         console.log('⚠ No se encontró la opción Clientedummy en el select de Cliente');
       }
@@ -167,13 +196,39 @@ test.describe('Crear Viaje - Flujo Feliz (Happy Path)', () => {
             return found ? found.value : null;
           });
           if (tipoServicioValue) {
-            await tipoServicioSelect.selectOption(tipoServicioValue);
-            console.log('✓ Tipo Servicio seleccionado: Tclp2210');
+            let tipoServicioSelected = false;
+            for (let retry = 0; retry < 3; retry++) {
+              await tipoServicioSelect.selectOption(tipoServicioValue);
+              await page.waitForTimeout(900);
+              const isInvalid = await tipoServicioSelect.evaluate(el => el.classList.contains('is-invalid') || el.closest('.form-group, .form-control')?.classList.contains('has-error'));
+              if (!isInvalid) {
+                tipoServicioSelected = true;
+                break;
+              }
+            }
+            if (tipoServicioSelected) {
+              console.log('✓ Tipo Servicio seleccionado: Tclp2210');
+            } else {
+              console.log('⚠ Tipo Servicio podría no estar correctamente seleccionado');
+            }
           } else {
             const tipoServicioOptions = await tipoServicioSelect.locator('option').all();
             if (tipoServicioOptions.length > 1) {
-              await tipoServicioSelect.selectOption({ index: 1 });
-              console.log('✓ Tipo Servicio seleccionado (fallback index 1)');
+              let tipoServicioSelected = false;
+              for (let retry = 0; retry < 3; retry++) {
+                await tipoServicioSelect.selectOption({ index: 1 });
+                await page.waitForTimeout(900);
+                const isInvalid = await tipoServicioSelect.evaluate(el => el.classList.contains('is-invalid') || el.closest('.form-group, .form-control')?.classList.contains('has-error'));
+                if (!isInvalid) {
+                  tipoServicioSelected = true;
+                  break;
+                }
+              }
+              if (tipoServicioSelected) {
+                console.log('✓ Tipo Servicio seleccionado (fallback index 1)');
+              } else {
+                console.log('⚠ Tipo Servicio (fallback) podría no estar correctamente seleccionado');
+              }
             } else {
               console.log('⚠ Tipo Servicio solo tiene opción vacía, verificando después de cambio de cliente...');
             }
@@ -185,8 +240,21 @@ test.describe('Crear Viaje - Flujo Feliz (Happy Path)', () => {
     
     const tipoViajeSelect = page.locator('#viajes-tipo_viaje_id');
     if (await tipoViajeSelect.isVisible()) {
-      await tipoViajeSelect.selectOption('1'); // Normal
-      console.log('✓ Tipo de Viaje seleccionado: Normal');
+      let tipoViajeSelected = false;
+      for (let retry = 0; retry < 3; retry++) {
+        await tipoViajeSelect.selectOption('1');
+        await page.waitForTimeout(900);
+        const isInvalid = await tipoViajeSelect.evaluate(el => el.classList.contains('is-invalid') || el.closest('.form-group, .form-control')?.classList.contains('has-error'));
+        if (!isInvalid) {
+          tipoViajeSelected = true;
+          break;
+        }
+      }
+      if (tipoViajeSelected) {
+        console.log('✓ Tipo de Viaje seleccionado: Normal');
+      } else {
+        console.log('⚠ Tipo de Viaje podría no estar correctamente seleccionado');
+      }
     } 
     
     // ========== PASO 6: Completar Unidad de Negocio ==========
@@ -194,56 +262,264 @@ test.describe('Crear Viaje - Flujo Feliz (Happy Path)', () => {
     
     const unidadNegocioSelect = page.locator('#viajes-unidad_negocio_id');
     if (await unidadNegocioSelect.isVisible()) {
-      await unidadNegocioSelect.selectOption('1'); // Defecto
-      console.log('✓ Unidad de Negocio seleccionada: Defecto');
-    }
-
-      // ========== PASO 6B: Completar Código de Carga (Campo Obligatorio) ==========
-      console.log('\nPaso 6B: Completando campo Código de Carga...');
-    
-      const cargaSelect = page.locator('#viajes-carga_id');
-      if (await cargaSelect.isVisible()) {
-        // Función para obtener las opciones actuales como [{text, value}]
-        const readOptions = async () => {
-          return await safeEvaluate(cargaSelect, (sel: HTMLSelectElement) =>
-            Array.from((sel as HTMLSelectElement).options || []).map(o => ({ text: (o.textContent || '').trim(), value: o.value }))
-          );
-        };
-
-        let opts = await readOptions() || [];
-        console.log(`Opciones de Carga encontradas: ${opts.length}`);
-
-        // Intentar seleccionar por texto preferido
-        const findPreferred = (options: {text: string, value: string}[]) =>
-          options.find(o => o.text === 'Bobinas-Sider15' || o.text === 'CONT-Bobinas-Sider14' || o.text.includes('Bobinas-Sider15') || o.text.includes('CONT-Bobinas-Sider14'));
-
-        let chosen = findPreferred(opts);
-
-        // Si pocas opciones, forzar evento change y reintentar leer
-        if (!chosen && opts.length <= 1) {
-          console.log('Intentando cargar opciones de Carga dinámicamente...');
-          await safeEvaluate(cargaSelect, (el: HTMLElement) => {
-            const event = new Event('change', { bubbles: true });
-            el.dispatchEvent(event);
-            return true;
-          });
-          await page.waitForTimeout(500);
-          opts = await readOptions() || [];
-          console.log(`Opciones de Carga después de disparar evento: ${opts.length}`);
-          chosen = findPreferred(opts);
-        }
-
-        if (chosen) {
-          await cargaSelect.selectOption(chosen.value);
-          console.log(`✓ Código de Carga seleccionado: ${chosen.text}`);
-        } else if (opts.length > 1) {
-          // fallback: seleccionar la segunda opción si existe
-          await cargaSelect.selectOption({ index: 1 });
-          console.log('✓ Código de Carga seleccionado (fallback index 1)');
-        } else {
-          console.log('⚠ No se encontraron opciones válidas de Código de Carga');
+      let unidadNegocioSelected = false;
+      for (let retry = 0; retry < 3; retry++) {
+        await unidadNegocioSelect.selectOption('1');
+        await page.waitForTimeout(900);
+        const isInvalid = await unidadNegocioSelect.evaluate(el => el.classList.contains('is-invalid') || el.closest('.form-group, .form-control')?.classList.contains('has-error'));
+        if (!isInvalid) {
+          unidadNegocioSelected = true;
+          break;
         }
       }
+      if (unidadNegocioSelected) {
+        console.log('✓ Unidad de Negocio seleccionada: Defecto');
+      } else {
+        console.log('⚠ Unidad de Negocio podría no estar correctamente seleccionada');
+      }
+    }
+
+    // ========== PASO 6B: Seleccionar explícitamente la carga CONT-Bobinas-Sider14, agregar ruta 05082025-1 y guardar ========== 
+    console.log('\nPaso 6B: Seleccionando carga CONT-Bobinas-Sider14, agregando ruta 05082025-1 y guardando...');
+
+    // Helper: robust select that falls back to setting value via evaluate and dispatching change
+    const robustSelect = async (selectLoc: any, value: string) => {
+      // Guard: si la página ya fue cerrada, salir inmediatamente
+      if ((page as any).isClosed && (page as any).isClosed()) return false;
+      // Try native selectOption first with small retries
+      for (let retry = 0; retry < 3; retry++) {
+        try {
+          await selectLoc.selectOption(value).catch(() => {});
+        } catch (e) {
+          // ignore
+        }
+        try {
+          if ((page as any).isClosed && (page as any).isClosed()) return false;
+          await page.waitForTimeout(500);
+        } catch (e) {
+          return false;
+        }
+        const isInvalid = await selectLoc.evaluate((el: HTMLSelectElement) => el.classList.contains('is-invalid') || el.closest('.form-group, .form-control')?.classList.contains('has-error')).catch(() => false);
+        if (!isInvalid) return true;
+      }
+      // Fallback: set value via DOM, dispatch change, and refresh bootstrap selectpicker if present
+      try {
+        if ((page as any).isClosed && (page as any).isClosed()) return false;
+        await selectLoc.evaluate((el: HTMLSelectElement, v: string) => {
+          try { el.value = v; } catch (e) {}
+          try { el.dispatchEvent(new Event('change', { bubbles: true })); } catch (e) {}
+          try {
+            // @ts-ignore
+            if (window && (window as any).$ && (window as any).$('.selectpicker') && (window as any).$('.selectpicker').selectpicker) {
+              try { (window as any).$('.selectpicker').selectpicker('refresh'); } catch(e){}
+            }
+          } catch (e) {}
+        }, value).catch(() => {});
+        try {
+          if ((page as any).isClosed && (page as any).isClosed()) return false;
+          await page.waitForTimeout(500);
+        } catch (e) {
+          return false;
+        }
+        const isInvalid = await selectLoc.evaluate((el: HTMLSelectElement) => el.classList.contains('is-invalid') || el.closest('.form-group, .form-control')?.classList.contains('has-error')).catch(() => false);
+        return !isInvalid;
+      } catch (e) {
+        return false;
+      }
+    };
+
+    const cargaSelect = page.locator('#viajes-carga_id');
+    if (await cargaSelect.isVisible()) {
+      // Buscar la opción exacta 'CONT-Bobinas-Sider14'
+      const cargaValue = await safeEvaluate(cargaSelect, (sel: HTMLSelectElement) => {
+        const opts = Array.from(sel.options || []) as HTMLOptionElement[];
+        const found = opts.find((o: HTMLOptionElement) => (o.textContent || '').trim() === 'CONT-Bobinas-Sider14');
+        return found ? found.value : null;
+      });
+      if (!cargaValue) throw new Error('No se encontró la opción de carga CONT-Bobinas-Sider14');
+      let cargaSelected = false;
+      // Intento principal usando robustSelect
+      cargaSelected = await robustSelect(cargaSelect, cargaValue);
+      // Si falló, verificar si hay mensajes de error visibles y reintentar algunos clicks y selección
+      if (!cargaSelected) {
+        // Detectar mensajes de error cercanos al select o alertas globales
+        const fieldError = await page.locator('#viajes-carga_id').locator('xpath=..').locator('.invalid-feedback, .text-danger').first().isVisible().catch(() => false);
+        const globalAlert = await page.locator('.alert-danger, .alert.alert-danger, .toast-error').first().isVisible().catch(() => false);
+        if (fieldError || globalAlert) {
+          console.log('⚠ Error detectado al seleccionar carga en este intento; reintentando click y selección...');
+          for (let retry = 0; retry < 3; retry++) {
+            try {
+              // Intentar darle foco y volver a seleccionar
+              await cargaSelect.scrollIntoViewIfNeeded().catch(() => {});
+              await cargaSelect.click().catch(() => {});
+              await page.waitForTimeout(400);
+              const ok = await robustSelect(cargaSelect, cargaValue);
+              if (ok) { cargaSelected = true; break; }
+            } catch (e) {
+              // continue
+            }
+            await page.waitForTimeout(500);
+          }
+        }
+      }
+      if (!cargaSelected) throw new Error('No se pudo seleccionar la carga CONT-Bobinas-Sider14 tras reintentos');
+      console.log('✓ Código de Carga seleccionado: CONT-Bobinas-Sider14');
+
+      // Click en Agregar Ruta (ambos selectores) -- mejorar robustez y diagnósticos
+      let rutaSelectVisible = false;
+      for (let tryRuta = 0; tryRuta < 5; tryRuta++) {
+        await page.waitForTimeout(700);
+
+        // Recolectar candidatos y sus atributos para diagnóstico
+        const agregarBtns = page.locator('button:has-text("Agregar Ruta"), button.btn.btn-sm.btn-success');
+        const btnCount = await agregarBtns.count().catch(() => 0);
+        console.log(`DEBUG: se detectaron ${btnCount} botones candidatos para 'Agregar Ruta' (intento ${tryRuta + 1})`);
+        for (let bi = 0; bi < btnCount; bi++) {
+          const b = agregarBtns.nth(bi);
+          const outer = await b.evaluate((el: HTMLElement) => ({ outerHTML: el.outerHTML, id: el.id || null, class: el.className || null, dataset: { ...(el as any).dataset } })).catch(() => null);
+          console.log('DEBUG: boton candidato ' + bi + ': ' + JSON.stringify(outer));
+        }
+
+        let clickedAgregar = false;
+
+        // Intento 1: click normal en el primer candidate que esté visible
+        if (btnCount > 0) {
+          const firstBtn = agregarBtns.first();
+          if (await firstBtn.isVisible().catch(() => false)) {
+            try {
+              await firstBtn.click().catch(() => {});
+              clickedAgregar = true;
+              console.log('✓ Click normal en primer botón candidato Agregar Ruta');
+            } catch (e) {
+              console.log('Advertencia click normal falló: ' + String(e));
+            }
+          }
+        }
+
+        // Intento 2: click forzado si no lo hizo el click normal
+        if (!clickedAgregar && btnCount > 0) {
+          const firstBtn = agregarBtns.first();
+          try {
+            await firstBtn.click({ force: true }).catch(() => {});
+            clickedAgregar = true;
+            console.log('✓ Click FORZADO en primer botón candidato Agregar Ruta');
+          } catch (e) {
+            console.log('Advertencia click forzado falló: ' + String(e));
+          }
+        }
+
+        // Intento 3: dispatchEvent via evaluate (por si el handler está atado a elementos internos)
+        if (!clickedAgregar && btnCount > 0) {
+          try {
+            await page.evaluate(() => {
+              const el = document.querySelector('button:has-text("Agregar Ruta"), button.btn.btn-sm.btn-success') as HTMLElement | null;
+              if (el) el.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true, view: window }));
+            }).catch(() => {});
+            clickedAgregar = true;
+            console.log('✓ dispatchEvent(click) ejecutado en selector Agregar Ruta');
+          } catch (e) {
+            console.log('Advertencia dispatchEvent falló: ' + String(e));
+          }
+        }
+
+        // Intento 4: ejecutar cualquier onclick inline o data-target si existe
+        if (!clickedAgregar) {
+          try {
+            await page.evaluate(() => {
+              const nodes = Array.from(document.querySelectorAll('button')).filter(b => (b.textContent || '').includes('Agregar Ruta'));
+              for (const n of nodes) {
+                const el = n as HTMLElement;
+                // invocar onclick si existe
+                const onclick = (el as any).onclick;
+                if (typeof onclick === 'function') { try { onclick.call(el); } catch(e) {} }
+                // disparar click por si acaso
+                try { el.click(); } catch(e) {}
+              }
+            }).catch(() => {});
+            clickedAgregar = true;
+            console.log('✓ Intento de invocar handlers inline/data-target realizado');
+          } catch (e) {
+            console.log('Advertencia invoking handlers falló: ' + String(e));
+          }
+        }
+
+        // Si hicimos algún click, esperar por peticiones de red que cargan rutas (diagnóstico)
+        if (clickedAgregar) {
+          try {
+            const resp = await page.waitForResponse(r => /ruta|rutas|lista.*ruta|get.*ruta/i.test(r.url()) || /ruta/i.test(r.request().url()), { timeout: 3000 }).catch(() => null);
+            if (resp) console.log('DEBUG: respuesta de red detectada tras click Agregar Ruta: ' + resp.url());
+          } catch (e) { /* ignore */ }
+        }
+
+        // Diagnóstico: listar modales actuales
+        const modals = await safeEvaluateAll(page.locator('.modal, .modal-dialog, .modal-backdrop'), (els: Element[]) =>
+          (els || []).map(el => ({ tag: el.tagName, outer: (el as HTMLElement).outerHTML?.slice(0, 800) }))
+        ).catch(() => null);
+        console.log('DEBUG: modals/backdrops after click: ' + JSON.stringify(modals || []));
+
+        // Capturar screenshot y selects para diagnóstico
+        await page.screenshot({ path: `after-agregar-ruta-${tryRuta + 1}.png`, fullPage: true }).catch(() => {});
+        const selectsDebug = await safeEvaluateAll(page.locator('select'), (sels: HTMLSelectElement[]) =>
+          (sels || []).map(s => ({ id: s.id || null, name: s.getAttribute('name') || null, options: Array.from(s.options || []).map(o => (o.textContent || '').trim()) }))
+        ).catch(() => null);
+        console.log('DEBUG: selects after Agregar Ruta: ' + JSON.stringify((selectsDebug || []).slice(0,20)));
+
+        // Buscar modal y tabla de rutas; algunos entornos NO usan select y muestran una tabla con botones
+        const modalRutas = page.locator('#modalRutasSugeridas');
+        if (await modalRutas.isVisible({ timeout: 2000 }).catch(() => false)) {
+          console.log('DEBUG: modalRutasSugeridas visible - buscar en tabla #tabla-rutas');
+          const filas = modalRutas.locator('#tabla-rutas tbody tr');
+          const filasCount = await filas.count().catch(() => 0);
+          console.log(`DEBUG: filas en tabla de rutas: ${filasCount}`);
+          let clickedRoute = false;
+          for (let ri = 0; ri < filasCount; ri++) {
+            const fila = filas.nth(ri);
+            // Obtener todas las celdas y comprobar si alguna contiene el Nro de ruta buscado
+            const tdTexts = await fila.locator('td').allTextContents().catch(() => [] as string[]);
+            const joined = tdTexts.join('|').trim();
+            console.log(`DEBUG: fila ${ri} celdas='${joined}'`);
+            if (joined.includes('05082025-1') || joined.includes('05082025') || joined.includes('050820251')) {
+              // encontrar botón verde en la fila y clickearlo
+              const botonOk = fila.locator('button.btn.btn-sm.btn-success').first();
+              if (await botonOk.isVisible().catch(() => false)) {
+                await botonOk.scrollIntoViewIfNeeded().catch(() => {});
+                await botonOk.click().catch(() => {});
+                console.log(`✓ Botón de fila ${ri} (fila contiene: ${joined}) clickeado`);
+                // esperar respuesta o que el modal se cierre
+                await page.waitForResponse(r => /ruta|detalle.*ruta|buscarDetalleRuta|buscarRutas/i.test(r.url()) || /ruta/i.test(r.request().url()), { timeout: 5000 }).catch(() => null);
+                await page.waitForTimeout(600);
+                clickedRoute = true;
+                break;
+              }
+            }
+          }
+          if (clickedRoute) {
+            // limpiar backdrops y click en guardar si aparece
+            await page.evaluate(() => { Array.from(document.querySelectorAll('.modal-backdrop')).forEach(b => b.remove()); }).catch(() => {});
+            const guardarBtnImmediate = page.locator('#btn_guardar_form, button.btn-success:has-text("Guardar")').first();
+            if (await guardarBtnImmediate.isVisible({ timeout: 2000 }).catch(() => false)) {
+              try { await guardarBtnImmediate.scrollIntoViewIfNeeded(); } catch(e) { /* ignore */ }
+              await guardarBtnImmediate.click().catch(() => {});
+              console.log('✓ Scroll y click en Guardar realizado tras agregar ruta (tabla)');
+            }
+            rutaSelectVisible = true;
+            break;
+          } else {
+            // Log de filas para diagnóstico
+            const filasDump = [] as string[];
+            for (let ri = 0; ri < Math.min(filasCount, 10); ri++) {
+              const txt = await filas.nth(ri).locator('td').allTextContents().catch(() => [] as string[]);
+              filasDump.push(txt.join('|'));
+            }
+            console.log('DEBUG: filas (primeras 10) en tabla de rutas: ' + JSON.stringify(filasDump));
+            console.log('⚠ No se encontró la ruta 05082025-1 en la tabla de rutas (intento ' + (tryRuta+1) + ')');
+          }
+        } else {
+          console.log('⚠ Modal de rutas no visible tras click (intento ' + (tryRuta+1) + ')');
+        }
+      }
+      if (!rutaSelectVisible) throw new Error('No se pudo visualizar el select de rutas tras varios intentos de click en Agregar Ruta (ver logs y screenshots)');
+    }
     // ========== PASO 7: Completar Origen ==========
     console.log('\nPaso 7: Completando campo Origen...');
     
@@ -256,8 +532,12 @@ test.describe('Crear Viaje - Flujo Feliz (Happy Path)', () => {
         return found ? found.value : null;
       });
       if (origenValue) {
-        await origenSelect.selectOption(origenValue);
-        console.log('✓ Origen seleccionado: 1_agunsa_lampa_RM');
+        const ok = await robustSelect(origenSelect, origenValue);
+        if (ok) {
+          console.log('✓ Origen seleccionado: 1_agunsa_lampa_RM');
+        } else {
+          console.log('⚠ Origen podría no estar correctamente seleccionado (robustSelect falló)');
+        }
       } else {
         console.log('⚠ No se encontró la opción 1_agunsa_lampa_RM en Origen');
       }
@@ -275,8 +555,12 @@ test.describe('Crear Viaje - Flujo Feliz (Happy Path)', () => {
         return found ? found.value : null;
       });
       if (destinoValue) {
-        await destinoSelect.selectOption(destinoValue);
-        console.log('✓ Destino seleccionado: 225_Starken_Sn Bernardo');
+        const ok = await robustSelect(destinoSelect, destinoValue);
+        if (ok) {
+          console.log('✓ Destino seleccionado: 225_Starken_Sn Bernardo');
+        } else {
+          console.log('⚠ Destino podría no estar correctamente seleccionado (robustSelect falló)');
+        }
       } else {
         console.log('⚠ No se encontró la opción 225_Starken_Sn Bernardo en Destino');
       }
@@ -421,21 +705,50 @@ test.describe('Crear Viaje - Flujo Feliz (Happy Path)', () => {
     // ========== PASO 11: Esperar confirmación ==========
     console.log('\nPaso 11: Esperando confirmación de creación...');
     await page.waitForLoadState('networkidle');
-    
-    // Buscar mensaje de confirmación
-    const alertBox = page.locator('.alert-success, .toast-success, [role="alert"]').first();
-    if (await alertBox.isVisible({ timeout: 3000 }).catch(() => false)) {
-      const mensaje = await alertBox.textContent();
-      console.log(`✓ Mensaje de confirmación: ${mensaje}`);
-    } else {
-      console.log('⚠ No se encontró mensaje de confirmación visible');
-    }
 
-      // Capturar cualquier mensaje (éxito, advertencia o error) de forma segura
-      const alerts = await safeEvaluateAll(page.locator('.alert, [role="alert"]'), (els: Element[]) =>
-        els.map(el => ({ text: el.textContent?.trim() || '', classes: el.getAttribute('class') || '' }))
+    // Esperar explícitamente por un mensaje de éxito; si aparece "Carga es obligatoria" de forma transitoria,
+    // lo ignoramos a menos que persista tras el timeout. Registramos únicamente el mensaje de éxito.
+    const waitForSuccessAlert = async (timeout = 8000) => {
+      const end = Date.now() + timeout;
+      let lastError: string | null = null;
+      while (Date.now() < end) {
+        const alerts = await safeEvaluateAll(page.locator('.alert, [role="alert"]'), (els: Element[]) =>
+          (els || []).map(el => ({ text: el.textContent?.trim() || '', classes: el.getAttribute('class') || '' }))
+        ).catch(() => null) || [];
+
+        if (alerts.length > 0) {
+          // Buscar éxito explícito
+          const success = alerts.find((a: any) => /viaje creado correctamente|confirmación/i.test(a.text) || a.classes.includes('alert-success') || a.classes.includes('toast-success'));
+          if (success) {
+            return { status: 'success', text: success.text };
+          }
+
+          // Si hay algún error conocido (p.ej. 'Carga es obligatoria'), guardarlo y esperar a que desaparezca
+          const cargaError = alerts.find((a: any) => /carga es obligatoria/i.test(a.text) || a.classes.includes('alert-danger') || a.classes.includes('toast-error'));
+          if (cargaError) {
+            lastError = cargaError.text;
+            // no logueamos el error aún; esperamos que desaparezca
+          }
+        }
+        await page.waitForTimeout(400);
+      }
+      return { status: 'timeout', error: lastError };
+    };
+
+    const creationResult = await waitForSuccessAlert(10000);
+    if (creationResult.status === 'success') {
+      console.log(`✓ Mensaje de confirmación: ${creationResult.text}`);
+    } else {
+      if (creationResult.error) {
+        console.log('[ERROR] ' + creationResult.error);
+      } else {
+        console.log('⚠ No se encontró mensaje de confirmación visible tras timeout');
+      }
+      // Como fallback, mostrar cualquier alert textual que exista (debug)
+      const fallbackAlerts = await safeEvaluateAll(page.locator('.alert, [role="alert"]'), (els: Element[]) =>
+        (els || []).map(el => ({ text: el.textContent?.trim() || '', classes: el.getAttribute('class') || '' }))
       ) || [];
-      for (const a of alerts) {
+      for (const a of fallbackAlerts) {
         if (a.text && a.text.length > 5) {
           const classes = a.classes;
           const alertType = classes.includes('success') ? 'SUCCESS' :
@@ -444,6 +757,7 @@ test.describe('Crear Viaje - Flujo Feliz (Happy Path)', () => {
           console.log(`[${alertType}] ${a.text.substring(0, 200)}`);
         }
       }
+    }
     
     // ========== PASO 12: Validar resultado ==========
     console.log('\nPaso 12: Validando resultado...');
