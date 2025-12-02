@@ -31,6 +31,14 @@ test.describe('Crear Viaje - Flujo Feliz (Happy Path)', () => {
    */
   
   test('Crear un nuevo viaje completando correctamente todos los campos requeridos', async ({ page }) => {
+    // ========== CONFIGURACIÓN: Manejar diálogos del navegador ==========
+    // Manejar diálogos del navegador (como "Cambia tu contraseña")
+    page.on('dialog', async dialog => {
+      console.log(`Diálogo del navegador detectado: "${dialog.message()}"`);
+      await dialog.accept();
+      console.log('✓ Diálogo aceptado automáticamente');
+    });
+    
     // ========== PASO 1: Login ==========
     console.log('Paso 1: Navegando a la página de login...');
     await page.goto('https://moveontruckqa.bermanntms.cl/login');
@@ -241,14 +249,17 @@ test.describe('Crear Viaje - Flujo Feliz (Happy Path)', () => {
     
     const origenSelect = page.locator('#_origendestinoform-origen');
     if (await origenSelect.isVisible()) {
-      // Origen es un combobox - obtener las opciones disponibles
-      const origenOptions = await origenSelect.locator('option').all();
-      if (origenOptions.length > 1) {
-        // Seleccionar la segunda opción si existe
-        await origenSelect.selectOption({ index: 1 });
-        console.log(`✓ Origen seleccionado`);
+      // Buscar la opción "1_agunsa_lampa_RM"
+      const origenValue = await safeEvaluate(origenSelect, (sel: HTMLSelectElement) => {
+        const opts = Array.from((sel as HTMLSelectElement).options || []);
+        const found = opts.find(o => (o.textContent || '').includes('1_agunsa_lampa_RM'));
+        return found ? found.value : null;
+      });
+      if (origenValue) {
+        await origenSelect.selectOption(origenValue);
+        console.log('✓ Origen seleccionado: 1_agunsa_lampa_RM');
       } else {
-        console.log('⚠ No hay opciones de Origen disponibles');
+        console.log('⚠ No se encontró la opción 1_agunsa_lampa_RM en Origen');
       }
     }
     
@@ -257,13 +268,17 @@ test.describe('Crear Viaje - Flujo Feliz (Happy Path)', () => {
     
     const destinoSelect = page.locator('#_origendestinoform-destino');
     if (await destinoSelect.isVisible()) {
-      const destinoOptions = await destinoSelect.locator('option').all();
-      if (destinoOptions.length > 2) {
-        // Seleccionar la segunda opción si existe (diferente de origen)
-        await destinoSelect.selectOption({ index: 2 });
-        console.log(`✓ Destino seleccionado`);
+      // Buscar la opción "225_Starken_Sn Bernardo"
+      const destinoValue = await safeEvaluate(destinoSelect, (sel: HTMLSelectElement) => {
+        const opts = Array.from((sel as HTMLSelectElement).options || []);
+        const found = opts.find(o => (o.textContent || '').includes('225_Starken_Sn Bernardo'));
+        return found ? found.value : null;
+      });
+      if (destinoValue) {
+        await destinoSelect.selectOption(destinoValue);
+        console.log('✓ Destino seleccionado: 225_Starken_Sn Bernardo');
       } else {
-        console.log('⚠ No hay opciones de Destino disponibles');
+        console.log('⚠ No se encontró la opción 225_Starken_Sn Bernardo en Destino');
       }
     }
 
