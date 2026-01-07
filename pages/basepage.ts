@@ -11,8 +11,7 @@ export class BasePage {
      * Navigate to a URL and wait for the network to be idle
      */
     async navigateTo(url: string) {
-        await this.page.goto(url);
-        await this.page.waitForLoadState('networkidle');
+        await this.page.goto(url, { waitUntil: 'domcontentloaded' });
     }
 
     /**

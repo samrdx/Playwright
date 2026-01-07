@@ -17,7 +17,7 @@ export class LoginPage extends BasePage {
     }
 
     async goto() {
-        await this.navigateTo('https://moveontruckqa.bermanntms.cl/login');
+        await this.page.goto('https://moveontruckqa.bermanntms.cl/login');
         await expect(this.page).toHaveURL(/.*login/);
     }
 
