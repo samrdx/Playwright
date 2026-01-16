@@ -11,7 +11,7 @@ export class TripListPage extends BasePage {
     }
 
     async goto() {
-        await this.navigateTo('https://moveontruckqa.bermanntms.cl/viajes/asignar');
+        await this.navigateTo('https://elcarniceroqa.bermanntms.cl/viajes/asignar');
     }
 
     async verifyTripExists(nroViaje: string) {

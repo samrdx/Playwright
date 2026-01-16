@@ -1,0 +1,18 @@
+{
+  "loginCredentials": {
+    "username": "arivas",
+    "password": "arivas",
+    "expectedUserName": "Angie"
+  },
+  "tripData": {
+    "tipoOperacion": "Operaciontest",
+    "cliente": "Viña 3",
+    "tipoServicio": "Servtest",
+    "tipoViaje": "Normal",
+    "unidadNegocio": "Undtest",
+    "carga": "13001",
+    "origen": "BUIN",
+    "destino": "FRIGOBUIN",
+    "ruta": "1301"
+  }
+}

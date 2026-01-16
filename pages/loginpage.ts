@@ -17,7 +17,7 @@ export class LoginPage extends BasePage {
     }
 
     async goto() {
-        await this.page.goto('https://moveontruckqa.bermanntms.cl/login');
+        await this.page.goto('https://elcarniceroqa.bermanntms.cl/login');
         await expect(this.page).toHaveURL(/.*login/);
     }
 
@@ -28,7 +28,7 @@ export class LoginPage extends BasePage {
     }
 
     async verifyLoginSuccess(expectedUser: string) {
-        await this.page.waitForURL('https://moveontruckqa.bermanntms.cl/site');
+        await this.page.waitForURL('https://elcarniceroqa.bermanntms.cl/site');
         await expect(this.userMenu).toContainText(expectedUser);
     }
 }

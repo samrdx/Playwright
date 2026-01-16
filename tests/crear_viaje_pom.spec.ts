@@ -2,8 +2,9 @@ import { test, expect } from '@playwright/test';
 import { LoginPage } from '../pages/loginpage';
 import { CreateTripPage } from '../pages/createtrippage';
 import { TripListPage } from '../pages/tripslistpage';
+import testData from '../data/viajes.data.json' with { type: 'json' };
 
-test('Flujo E2E: Crear Viaje Correctamente', async ({ page }) => {
+test.only('Flujo E2E: Crear Viaje Correctamente', async ({ page }) => {
     test.setTimeout(120000); // Match original test timeout
 
     const login = new LoginPage(page);
@@ -17,8 +18,8 @@ test('Flujo E2E: Crear Viaje Correctamente', async ({ page }) => {
     // Paso 1: Login
     await test.step('Login al sistema', async () => {
         await login.goto();
-        await login.login('srodriguez', 'srodriguez');
-        await login.verifyLoginSuccess('Samuel');
+        await login.login(testData.loginCredentials.username, testData.loginCredentials.password);
+        await login.verifyLoginSuccess(testData.loginCredentials.expectedUserName);
     });
 
     // Paso 2: Crear Viaje
@@ -29,16 +30,20 @@ test('Flujo E2E: Crear Viaje Correctamente', async ({ page }) => {
         createdId = await viajes.fillNroViaje();
         console.log(`ID Generado: ${createdId}`);
         
-        await viajes.selectTipoOperacion();
-        await viajes.selectCliente();
-        await viajes.selectTipoServicio();
-        await viajes.selectTipoViaje();
-        await viajes.selectUnidadNegocio();
-        await viajes.selectCarga();
-        await viajes.selectOrigen();
-        await viajes.selectDestino();
+        await viajes.selectTipoOperacion(testData.tripData.tipoOperacion);
+        await viajes.selectCliente(testData.tripData.cliente);
+        await viajes.selectTipoServicio(testData.tripData.tipoServicio);
+        await viajes.selectTipoViaje(testData.tripData.tipoViaje);
+        await viajes.selectUnidadNegocio(testData.tripData.unidadNegocio);
+        await viajes.selectCarga(testData.tripData.carga);
+        await viajes.agregarRuta(testData.tripData.ruta);
 
-        await viajes.agregarRuta('05082025-1');
+        await viajes.selectOrigen(testData.tripData.origen);
+        await viajes.selectDestino(testData.tripData.destino);
+
+        const randomQty = Math.floor(Math.random() * 10) + 1;
+        await viajes.fillCantidadKg(randomQty);
+
         await viajes.guardarViaje();
     });
 

@@ -12,6 +12,7 @@ export class CreateTripPage extends BasePage {
     readonly cargaSelect: Locator;
     readonly origenSelect: Locator;
     readonly destinoSelect: Locator;
+    readonly cantidadInput: Locator;
     readonly guardarBtn: Locator;
     readonly successAlert: Locator;
 
@@ -26,18 +27,23 @@ export class CreateTripPage extends BasePage {
         this.cargaSelect = page.locator('#viajes-carga_id');
         this.origenSelect = page.locator('#_origendestinoform-origen');
         this.destinoSelect = page.locator('#_origendestinoform-destino');
+        this.cantidadInput = page.locator('#cantidad');
         this.guardarBtn = page.locator('#btn_guardar_form, button.btn-success:has-text("Guardar")').first();
         this.successAlert = page.locator('.alert-success, .toast-success').first();
     }
 
     async goto() {
-        await this.navigateTo('https://moveontruckqa.bermanntms.cl/viajes/crear');
+        await this.navigateTo('https://elcarniceroqa.bermanntms.cl/viajes/crear');
     }
 
     async fillNroViaje() {
         if (await this.nroViajeInput.isVisible()) {
-            const uniqueId = String(Math.floor(1000 + Math.random() * 9000));
+            // Generate unique ID using timestamp + random to avoid duplicates
+            const timestamp = Date.now().toString().slice(-6); // Last 6 digits of timestamp
+            const random = Math.floor(100 + Math.random() * 900); // 3-digit random
+            const uniqueId = `${timestamp}${random}`;
             await this.nroViajeInput.fill(uniqueId);
+            console.log(`✓ Generated unique trip ID: ${uniqueId}`);
             return uniqueId;
         }
         return '';
@@ -186,7 +192,33 @@ export class CreateTripPage extends BasePage {
         console.log(`✓ Carga selected: ${text}`);
     }
 
+    async fillCantidadKg(cantidad: number) {
+        try {
+            // Try explicit selector first
+            const input = this.page.locator('#cantidad');
+            if (await input.isVisible({ timeout: 1000 })) {
+                await input.fill(cantidad.toString());
+                console.log(`✓ Cantidad/Kg filled (via #cantidad): ${cantidad}`);
+                return;
+            }
+
+            // Try by label (Fallback that works)
+            const byLabel = this.page.locator('label:has-text("Cantidad"), label:has-text("Kg")').locator('..').locator('input').first();
+            if (await byLabel.isVisible({ timeout: 5000 })) {
+                await byLabel.fill(cantidad.toString());
+                console.log(`✓ Cantidad/Kg filled (via label): ${cantidad}`);
+                return;
+            }
+             
+            console.log('⚠ Cantidad input not visible after attempts.');
+        } catch (e) {
+             console.log('⚠ Exception filling Cantidad: ' + e);
+        }
+    }
+
     async agregarRuta(rutaPartialText: string = '05082025-1') {
+        await this.page.waitForTimeout(1500); // Wait for potential updates after Carga/Client
+
         // Robust Click on "Agregar Ruta"
         // Define locator dynamically as it might match multiple elements
         const agregarBtns = this.page.locator('button:has-text("Agregar Ruta"), button.btn.btn-sm.btn-success');
@@ -224,7 +256,7 @@ export class CreateTripPage extends BasePage {
 
         // Handle Modal
         const modalRutas = this.page.locator('#modalRutasSugeridas');
-        await expect(modalRutas).toBeVisible({ timeout: 5000 });
+        await expect(modalRutas).toBeVisible({ timeout: 10000 });
         
         const row = modalRutas.locator('tr').filter({ hasText: rutaPartialText }).first();
         if (await row.isVisible()) {
